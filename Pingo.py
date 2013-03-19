@@ -117,8 +117,6 @@ class card:
             cwin.addstr('|')
             cwin.move(cwin.getyx()[0] + 1, self.x)
         cwin.addstr('|---' * self.dimension + '|')
-        cwin.border()
-        cwin.refresh()
 
     def check(self, wnumbers):
         vert = 0
@@ -419,6 +417,7 @@ def run_game():
         hwin.refresh()
         for myCard in myCards:
             myCard.draw(drawn)
+        cwin.refresh()
         time.sleep(1)
     display_scores(results(myCards, drawn))
 
