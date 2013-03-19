@@ -163,7 +163,6 @@ def menu_size():
         else:
             mwin.addstr('   %d:\t%dx%d' %
                 (size, math.sqrt(size), math.sqrt(size)))
-        yx = mwin.getyx()
     mwin.move(mwin.getyx()[0] + 2, 1)
     mwin.addstr('q: quit', curses.color_pair(1))
     curses.echo()
