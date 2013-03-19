@@ -150,6 +150,22 @@ class card:
                                         #to bottom/left to right (MAX 2) bingos
 
 
+def get_answer():
+    mwin.move(mwin.getyx()[0] + 2, 1)
+    mwin.addstr('q: quit', curses.color_pair(1))
+    curses.echo()
+    mwin.move(mwin.getyx()[0] + 1, 1)
+    mwin.addstr(':> ')
+    show_cursor(1)
+    answer = mwin.getstr()
+    show_cursor(0)
+    curses.noecho()
+    if str(answer, 'UTF-8') == 'q':
+        curses.endwin()
+        exit(0)
+    else:
+        return answer
+
 def menu_size():
     mwin.erase()        #Make sure the screen is clean
     mwin.border()
@@ -163,18 +179,7 @@ def menu_size():
         else:
             mwin.addstr('   %d:\t%dx%d' %
                 (size, math.sqrt(size), math.sqrt(size)))
-    mwin.move(mwin.getyx()[0] + 2, 1)
-    mwin.addstr('q: quit', curses.color_pair(1))
-    curses.echo()
-    mwin.move(mwin.getyx()[0] + 1, 1)
-    mwin.addstr(':> ')
-    show_cursor(1)
-    answer = mwin.getstr()
-    show_cursor(0)
-    curses.noecho()
-    if str(answer, 'UTF-8') == 'q':
-        curses.endwin()
-        exit(0)
+    answer = get_answer()
     try:
         size = int(answer)
     except ValueError:
@@ -198,18 +203,7 @@ def menu_level(size):
     mwin.addstr('MIN:\t1')
     mwin.move(mwin.getyx()[0] + 1, 1)
     mwin.addstr('MAX:\t%d' % max_level)
-    mwin.move(mwin.getyx()[0] + 2, 1)
-    mwin.addstr('q: quit', curses.color_pair(1))
-    curses.echo()
-    mwin.move(mwin.getyx()[0] + 1, 1)
-    mwin.addstr(':> ')
-    show_cursor(1)
-    answer = mwin.getstr()
-    show_cursor(0)
-    curses.noecho()
-    if str(answer, 'UTF-8') == 'q':
-        curses.endwin()
-        exit(0)
+    answer = get_answer()
     try:
         level = int(answer)
     except ValueError:
@@ -251,18 +245,7 @@ def menu_cards(size):
     mwin.addstr('MIN: 1')
     mwin.move(mwin.getyx()[0] + 1, 1)
     mwin.addstr('MAX: %d' % count)
-    mwin.move(mwin.getyx()[0] + 2, 1)
-    mwin.addstr('q: quit', curses.color_pair(1))
-    curses.echo()
-    mwin.move(mwin.getyx()[0] + 1, 1)
-    mwin.addstr(':> ')
-    show_cursor(1)
-    answer = mwin.getstr()
-    show_cursor(0)
-    curses.noecho()
-    if str(answer, 'UTF-8') == 'q':
-        curses.endwin()
-        exit(0)
+    answer = get_answer()
     try:
         tmp = int(answer)
     except ValueError:
