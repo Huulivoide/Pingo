@@ -39,27 +39,27 @@ import random
 import math
 import time
 import sys
-import platform  #Needed to detect if we are running on OSX
+import platform  # Needed to detect if we are running on OSX
 import curses
 from curses import panel
 
-#We need a workaround for OSX, which doesn't like set_curs() function.
+# We need a workaround for OSX, which doesn't like set_curs() function.
 if platform.system() == 'darwin':
     def show_cursor(value):
-        return True;
+        return True
 else:
     def show_cursor(value):
         curses.curs_set(value)
 
-min_width = 54  #Determinated by header banner
+min_width = 54  # Determinated by header banner
 min_height = 20
 
 card_header = {
-    9  : 'P I N G O',
-    16 : '  P I N G O  ',
-    25 : 'P   I   N   G   O',
-    36 : '  P   I   N   G   O  ',
-    49 : '    P   I   N   G   O    '
+    9: 'P I N G O',
+    16: '  P I N G O  ',
+    25: 'P   I   N   G   O',
+    36: '  P   I   N   G   O  ',
+    49: '    P   I   N   G   O    '
 }
 
 
@@ -73,7 +73,7 @@ class card:
         self.dimension = int(math.sqrt(self.size))
 
     def fill(self):
-        rints = [i for i in                         #As in random ints
+        rints = [i for i in                         # As in random ints
             range(1, int(self.size + ((self.size / 4) * self.level)))]
         random.shuffle(rints)
         for row in range(0, self.dimension):
@@ -100,9 +100,9 @@ class card:
             cwin.move(cwin.getyx()[0] + 1, self.x)
             for col in range(0, self.dimension):
                 if self.numbers[row][col] in wnumbers:
-                    color = 2       #Magenta on black
+                    color = 2       # Magenta on black
                 else:
-                    color = 3       #Green on black
+                    color = 3       # Green on black
                 if self.numbers[row][col] >= 10:
                     cwin.addstr('| ')
                     cwin.attron(curses.color_pair(color))
@@ -146,8 +146,8 @@ class card:
         if set(tb_array).issubset(set(wnumbers)):
             topbot += 1
 
-        return (vert, horz, topbot)     #Number of vertical, horizontal and top
-                                        #to bottom/left to right (MAX 2) bingos
+        return (vert, horz, topbot)    # Number of vertical, horizontal and top
+                                       # to bottom/left to right (MAX 2) bingos
 
 
 def get_answer():
@@ -166,22 +166,23 @@ def get_answer():
     else:
         return answer
 
+
 def menu_size():
-    mwin.erase()        #Make sure the screen is clean
+    mwin.erase()        # Make sure the screen is clean
     mwin.border()
     mwin.move(1, 1)
     mwin.addstr('Choose card size:')
     for size in card_sizes:
         mwin.move(mwin.getyx()[0] + 1, 1)
         if size == 25:
-            mwin.addstr('   %d:\t%dx%d *' %
-                (size, math.sqrt(size), math.sqrt(size)))
+            mwin.addstr(
+                '   %d:\t%dx%d *' % (size, math.sqrt(size), math.sqrt(size)))
         else:
-            mwin.addstr('   %d:\t%dx%d' %
-                (size, math.sqrt(size), math.sqrt(size)))
+            mwin.addstr(
+                '   %d:\t%dx%d' % (size, math.sqrt(size), math.sqrt(size)))
     answer = get_answer()
     try:
-        size = int(answer)
+        int(answer)
     except ValueError:
         return (menu_size())
     else:
@@ -195,7 +196,7 @@ def menu_level(size):
     max_level = 1
     while int(size + ((size / 4) * (max_level + 1))) < 100:
         max_level += 1
-    mwin.erase()        #Make sure the screen is clean
+    mwin.erase()        # Make sure the screen is clean
     mwin.border()
     mwin.move(1, 1)
     mwin.addstr('Choose game level:')
@@ -205,7 +206,7 @@ def menu_level(size):
     mwin.addstr('MAX:\t%d' % max_level)
     answer = get_answer()
     try:
-        level = int(answer)
+        int(answer)
     except ValueError:
         return(menu_level(size))
     else:
@@ -216,28 +217,27 @@ def menu_level(size):
 
 
 def menu_cards(size):
-    yc = 0  #How many fits to the Y-axis
-    xc = 0  #How many fits to the X-axis
-    card_cordinates = []  #List of card's starting points
+    yc = 0  # How many fits to the Y-axis
+    xc = 0  # How many fits to the X-axis
+    card_cordinates = []  # List of card's starting points
 
     y_size = int(math.sqrt(size) * 2) + 4
     x_size = int(math.sqrt(size) * 4) + 2
 
-
-    while True:         #Determinate how many fits to the Y-axis
+    while True:         # Determinate how many fits to the Y-axis
         if (cwin.getmaxyx()[0] - 2) - (yc * y_size) >= y_size:
             yc += 1
         else:
             break
 
-    while True:         #Determinate how many fits to the X-axis
+    while True:         # Determinate how many fits to the X-axis
         if (cwin.getmaxyx()[1] - 2) - (xc * x_size) >= x_size:
             xc += 1
         else:
             break
     count = yc * xc
 
-    mwin.erase()        #Make sure the screen is clean
+    mwin.erase()        # Make sure the screen is clean
     mwin.border()
     mwin.move(1, 1)
     mwin.addstr('How many cards: ')
@@ -247,7 +247,7 @@ def menu_cards(size):
     mwin.addstr('MAX: %d' % count)
     answer = get_answer()
     try:
-        tmp = int(answer)
+        int(answer)
     except ValueError:
         return(menu_cards(size))
     else:
@@ -266,7 +266,8 @@ def menu_cards(size):
                 y += int(y_size)
             return(card_cordinates)
 
-def draw_scores(win, results):       #Touple of 3
+
+def draw_scores(win, results):       # Touple of 3
     win.erase()
     win.border()
     win.move(1, 1)
@@ -284,6 +285,7 @@ def draw_scores(win, results):       #Touple of 3
     win.move(win.getyx()[0] + 1, 13)
     win.addstr(str(results[2]), curses.color_pair(2))
     win.refresh()
+
 
 def display_scores(results):
     rpan.top()
@@ -307,11 +309,13 @@ def display_scores(results):
     else:
         return(display_scores(results))
 
+
 def new_game():
     size = menu_size()
     level = menu_level(size)
     cards = menu_cards(size)
     return (size, level, cards)
+
 
 def init_header():
     hwin.erase()
@@ -329,7 +333,8 @@ def init_header():
     hwin.addstr("Today's lucky numbers are: ")
     hwin.refresh()
 
-def results(cards, numbers):      #cards = array of cards
+
+def results(cards, numbers):      # cards = array of cards
     x = 0
     y = 0
     z = 0
@@ -339,6 +344,7 @@ def results(cards, numbers):      #cards = array of cards
         x += _x
         z += _z
     return (y, x, z)
+
 
 def run_game():
     cwin.erase()
@@ -356,22 +362,21 @@ def run_game():
     wnumbers = [i for i in range(1, int(size + ((size / 4) * level)))]
     random.shuffle(wnumbers)
 
-
     i = 0
     drawn = []
     position = []
     line_buffer = ''
-    while i < myCards[0].size :
+    while i < myCards[0].size:
         drawn.append(wnumbers[i])
 
         if hwin.getyx()[0] == 4 and hwin.getyx()[1] > (WIDTH - 5):
             hwin.move(3, 28)
-            hwin.addstr(' ' * (WIDTH - 30))        #Clean the 1st wnumber row
+            hwin.addstr(' ' * (WIDTH - 30))   # Clean the 1st wnumber row
             hwin.move(3, 28)
-            hwin.addstr(line_buffer)               #write the buffer back on line 1
+            hwin.addstr(line_buffer)          # write the buffer back on line 1
             line_buffer = ''
             hwin.move(4, 28)
-            hwin.addstr(' ' * (WIDTH - 30))        #Clean the 2nd wnumber row
+            hwin.addstr(' ' * (WIDTH - 30))   # Clean the 2nd wnumber row
             hwin.move(4, 28)
 
         if hwin.getyx()[1] > (WIDTH - 5):
@@ -394,7 +399,7 @@ def run_game():
         hwin.attron(curses.color_pair(1))
         hwin.addstr('[%d/%d]' % (i, size))
         hwin.attroff(curses.color_pair(1))
-        draw_scores (mwin, results(myCards, drawn))
+        draw_scores(mwin, results(myCards, drawn))
         hwin.move(position[0], position[1])
         hwin.refresh()
         for myCard in myCards:
@@ -403,24 +408,26 @@ def run_game():
         time.sleep(1)
     display_scores(results(myCards, drawn))
 
+
 def __main__(screen):
     global hwin, cwin, mwin, HEIGHT, WIDTH, card_sizes, rwin, rpan
     HEIGHT, WIDTH = screen.getmaxyx()
     if HEIGHT < min_height or WIDTH < min_width:
         curses.endwin()
-        sys.stderr.write('Your terminal is too small to run this application.\n' +
-            'If you are on a linux console (not in X11 terminal application,)' +
+        sys.stderr.write(
+            'Your terminal is too small to run this application.\n' +
+            'If you are on a unix console (not in X11 terminal application,)' +
             'you could try to see if there is smaller consolefont awaiable ' +
             'and use setfont command to use it.\n')
-        exit(5)             #Too small screen
+        exit(5)             # Too small screen
 
-    hwin = screen.subwin(6, WIDTH, 0, 0)                #Header and winning numbers
-    cwin = screen.subwin(HEIGHT - 6, WIDTH - 21, 6, 0)  #Players cards
-    mwin = screen.subwin(14, 21, 6, WIDTH - 21)         #Menu and results
+    hwin = screen.subwin(6, WIDTH, 0, 0)          # Header and winning numbers
+    cwin = screen.subwin(HEIGHT - 6, WIDTH - 21, 6, 0)  # Players cards
+    mwin = screen.subwin(14, 21, 6, WIDTH - 21)         # Menu and results
 
-    rwin = screen.subwin(9, 30, 0, 0)   #Panel showing results and asking for
-    rpan = panel.new_panel(rwin)              #if user want a new game
-    
+    rwin = screen.subwin(9, 30, 0, 0)   # Panel showing results and asking for
+    rpan = panel.new_panel(rwin)        # if user want a new game
+
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
     curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_BLACK)
@@ -432,6 +439,6 @@ def __main__(screen):
             card_sizes.append(size ** 2)
 
     run_game()
-    
+
 
 curses.wrapper(__main__)
