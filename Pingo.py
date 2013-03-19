@@ -39,8 +39,17 @@ import random
 import math
 import time
 import sys
+import platform  #Needed to detect if we are running on OSX
 import curses
 from curses import panel
+
+#We need a workaround for OSX, which doesn't like set_curs() function.
+if platform.system() == 'darwin':
+    def show_cursor(value):
+        return True;
+else:
+    def show_cursor(value):
+        curses.curs_set(value)
 
 min_width = 54  #Determinated by header banner
 min_height = 20
@@ -162,9 +171,9 @@ def menu_size():
     curses.echo()
     mwin.move(mwin.getyx()[0] + 3, 1)
     mwin.addstr(':> ')
-    curses.curs_set(1)
+    show_cursor(1)
     answer = mwin.getstr()
-    curses.curs_set(0)
+    show_cursor(0)
     curses.noecho()
     if str(answer, 'UTF-8') == 'q':
         curses.endwin()
@@ -197,9 +206,9 @@ def menu_level(size):
     curses.echo()
     mwin.move(mwin.getyx()[0] + 1, 1)
     mwin.addstr(':> ')
-    curses.curs_set(1)
+    show_cursor(1)
     answer = mwin.getstr()
-    curses.curs_set(0)
+    show_cursor(0)
     curses.noecho()
     if str(answer, 'UTF-8') == 'q':
         curses.endwin()
@@ -250,9 +259,9 @@ def menu_cards(size):
     curses.echo()
     mwin.move(mwin.getyx()[0] + 1, 1)
     mwin.addstr(':> ')
-    curses.curs_set(1)
+    show_cursor(1)
     answer = mwin.getstr()
-    curses.curs_set(0)
+    show_cursor(0)
     curses.noecho()
     if str(answer, 'UTF-8') == 'q':
         curses.endwin()
@@ -307,7 +316,7 @@ def display_scores(results):
     rwin.move(rwin.getyx()[0] + 1, 1)
     rwin.addstr(':> ')
     rwin.refresh()
-    curses.curs_set(1)
+    show_cursor(1)
     answer = rwin.getstr()
     if str(answer, 'UTF-8') == 'q':
         curses.endwin()
