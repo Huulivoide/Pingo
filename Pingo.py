@@ -185,11 +185,10 @@ def menu_size():
         int(answer)
     except ValueError:
         return (menu_size())
+    if not int(answer) in card_sizes:
+        return(menu_size())
     else:
-        if not int(answer) in card_sizes:
-            return(menu_size())
-        else:
-            return float(answer)
+        return float(answer)
 
 
 def menu_level(size):
@@ -209,11 +208,10 @@ def menu_level(size):
         int(answer)
     except ValueError:
         return(menu_level(size))
+    if not int(answer) in range(1, max_level + 1):
+        return(menu_level(size))
     else:
-        if not int(answer) in range(1, max_level + 1):
-            return(menu_level(size))
-        else:
-            return float(answer)
+        return float(answer)
 
 
 def menu_cards(size):
@@ -250,21 +248,20 @@ def menu_cards(size):
         int(answer)
     except ValueError:
         return(menu_cards(size))
+    if not int(answer) in range(1, count + 1):
+        return(menu_cards(size))
     else:
-        if not int(answer) in range(1, count + 1):
-            return(menu_cards(size))
-        else:
-            i = 0
+        i = 0
+        _x = 0
+        y = 1
+        while i < int(answer):
+            while _x < xc and i < int(answer):
+                card_cordinates.append([int(y), int((_x * x_size) + 1)])
+                i += 1
+                _x += 1
             _x = 0
-            y = 1
-            while i < int(answer):
-                while _x < xc and i < int(answer):
-                    card_cordinates.append([int(y), int((_x * x_size) + 1)])
-                    i += 1
-                    _x += 1
-                _x = 0
-                y += int(y_size)
-            return(card_cordinates)
+            y += int(y_size)
+        return(card_cordinates)
 
 
 def draw_scores(win, results):       # Touple of 3
