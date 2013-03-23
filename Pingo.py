@@ -44,7 +44,7 @@ import curses
 from curses import panel
 
 # We need a workaround for OSX, which doesn't like set_curs() function.
-if platform.system() == 'darwin':
+if platform.system() == 'Darwin':
     def show_cursor(value):
         return True
 else:
